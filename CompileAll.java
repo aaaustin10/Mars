@@ -24,7 +24,15 @@ public class CompileAll {
         args_to_compile.add("javac");
         try {
             compileDir(new File("."));
-            Process compiler = Runtime.getRuntime().exec(args_to_compile.toArray(new String[args_to_compile.size()]));
+            ProcessBuilder compiler_builder = new ProcessBuilder(args_to_compile.toArray(new String[args_to_compile.size()]));
+            compiler_builder.redirectErrorStream(true);
+            Process compiler = compiler_builder.start();
+            BufferedReader process_output = new BufferedReader(new InputStreamReader(compiler.getInputStream()));
+            String line = null;
+            while ((line = process_output.readLine()) != null) {
+                System.out.println(line);
+            }
+            process_output.close();
             compiler.waitFor();
         } catch (IOException e) {
             System.out.println("IOException has been thrown!" + e.toString());
