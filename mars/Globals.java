@@ -94,6 +94,10 @@ public class Globals {
     public static int exitCode = 0;
 
     public static boolean runSpeedPanelExists = false;
+    
+    public enum ARCH_ENUM {MIPS, ARM};
+    // MIPS is default for backward compatibility
+    public static ARCH_ENUM ARCHITECTURE = ARCH_ENUM.MIPS;
 
     private static String getCopyrightYears() {
         return "2003-2014";

@@ -393,6 +393,14 @@ public class MarsLaunch {
                 countInstructions = true;
                 continue;
             }
+            if (args[i].toLowerCase().equals("arm")) {
+                Globals.ARCHITECTURE = Globals.ARCH_ENUM.ARM;
+                continue;
+            }
+            if (args[i].toLowerCase().equals("mips")) {
+                Globals.ARCHITECTURE = Globals.ARCH_ENUM.MIPS;
+                continue;
+            }
 
 
             if (args[i].indexOf("$") == 0) {
@@ -482,6 +490,11 @@ public class MarsLaunch {
             }
             ArrayList MIPSprogramsToAssemble =
                 code.prepareFilesForAssembly(filesToAssemble, mainFile.getAbsolutePath(), null);
+
+            if (Globals.ARCHITECTURE == Globals.ARCH_ENUM.ARM) {
+                Program arm = new ARMProgram(mainFile.getAbsolutePath(), null);
+                arm.prepareFilesForAssembly(filesToAssemble);
+            }
             if (Globals.debug) {
                 out.println("--------  ASSEMBLY BEGINS  -----------");
             }
