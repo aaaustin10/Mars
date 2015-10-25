@@ -117,7 +117,6 @@ public class MarsLaunch {
     private ArrayList registerDisplayList;
     private ArrayList memoryDisplayList;
     private ArrayList filenameList;
-    private MIPSprogram code;
     private int maxSteps;
     private int instructionCount;
     private PrintStream out; // stream for display of command line output
@@ -152,7 +151,6 @@ public class MarsLaunch {
             filenameList = new ArrayList();
             MemoryConfigurations.setCurrentConfiguration(MemoryConfigurations.getDefaultConfiguration());
             // do NOT use Globals.program for command line MARS -- it triggers 'backstep' log.
-            code = new MIPSprogram();
             maxSteps = -1;
             out = System.out;
             if (parseCommandArgs(args)) {
@@ -488,18 +486,25 @@ public class MarsLaunch {
             if (Globals.debug) {
                 out.println("--------  TOKENIZING BEGINS  -----------");
             }
-            ArrayList MIPSprogramsToAssemble =
-                code.prepareFilesForAssembly(filesToAssemble, mainFile.getAbsolutePath(), null);
 
-            if (Globals.ARCHITECTURE == Globals.ARCH_ENUM.ARM) {
-                Program arm = new ARMProgram(mainFile.getAbsolutePath(), null);
-                arm.prepareFilesForAssembly(filesToAssemble);
+            Program p = null;
+            ArrayList programsToAssemble = null;
+            if (Globals.ARCHITECTURE == Globals.ARCH_ENUM.MIPS) {
+                p = new MIPSprogram();
+                programsToAssemble =
+                    p.prepareFilesForAssembly(filesToAssemble, mainFile.getAbsolutePath(), null);
             }
+            if (Globals.ARCHITECTURE == Globals.ARCH_ENUM.ARM) {
+                p = new ARMProgram(mainFile.getAbsolutePath(), null);
+                programsToAssemble = p.prepareFilesForAssembly(filesToAssemble, mainFile.getAbsolutePath(), null);
+            }
+
             if (Globals.debug) {
                 out.println("--------  ASSEMBLY BEGINS  -----------");
             }
             // Added logic to check for warnings and print if any. DPS 11/28/06
-            ErrorList warnings = code.assemble(MIPSprogramsToAssemble, pseudo, warningsAreErrors);
+
+            ErrorList warnings = p.assemble(programsToAssemble, pseudo, warningsAreErrors);
             if (warnings != null && warnings.warningsOccurred()) {
                 out.println(warnings.generateWarningReport());
             }
@@ -513,7 +518,7 @@ public class MarsLaunch {
                     out.println("--------  SIMULATION BEGINS  -----------");
                 }
                 programRan = true;
-                boolean done = code.simulate(maxSteps);
+                boolean done = p.simulate(maxSteps);
                 if (!done) {
                     out.println("\nProgram terminated when maximum step limit "+maxSteps+" reached.");
                 }

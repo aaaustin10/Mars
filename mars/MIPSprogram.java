@@ -47,7 +47,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * @version August 2003
  **/
 
-public class MIPSprogram {
+public class MIPSprogram extends Program {
 
     // See explanation of method inSteppedExecution() below.
     private boolean steppedExecution = false;
