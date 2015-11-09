@@ -15,6 +15,7 @@ public abstract class Program {
     }
 
     public ArrayList prepareFilesForAssembly(ArrayList filenames, String leadFilename, String exceptionHandler) throws ProcessingException{
+        // make prepareFilesForAssembly throw an error when not overridden
         ArrayList unitsToAssemble = new ArrayList();
         for (int i = 0; i < filenames.size(); i++) {
             String filename = (String) filenames.get(i);

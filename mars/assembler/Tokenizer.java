@@ -102,7 +102,7 @@ public class Tokenizer {
             // This IF statement will replace original source with source modified by .eqv substitution.
             // Not needed by assembler, but looks better in the Text Segment Display.
             if (sourceLine.length() > 0 && sourceLine != currentLineTokens.getProcessedLine()) {
-                source.set(i,new SourceLine(currentLineTokens.getProcessedLine(),source.get(i).getMIPSprogram(), source.get(i).getLineNumber()));
+                source.set(i, new SourceLine(currentLineTokens.getProcessedLine(), source.get(i).getMIPSprogram(), source.get(i).getLineNumber()));
             }
         }
         if (errors.errorsOccurred()) {
