@@ -312,7 +312,7 @@ public class MIPSprogram extends Program {
     public ErrorList assemble(ArrayList MIPSprogramsToAssemble, boolean extendedAssemblerEnabled,
                               boolean warningsAreErrors) throws ProcessingException {
         this.backStepper = null;
-        Assembler asm = new Assembler();
+        Assembler asm = new MIPSAssembler();
         this.machineList = asm.assemble(MIPSprogramsToAssemble, extendedAssemblerEnabled, warningsAreErrors);
         this.backStepper = new BackStepper();
         return asm.getErrorList();

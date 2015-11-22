@@ -4,6 +4,7 @@ import java.util.*;
 
 public class CompileAll {
     static ArrayList<String> args_to_compile = new ArrayList<String>();
+    static boolean compile_anyway = false;
 
     static void compileDir(File dir) {
         for (File f : dir.listFiles()) {
@@ -14,7 +15,7 @@ public class CompileAll {
             String path = f.toString();
             if (path.endsWith(".java")) {
                 String class_file = path.substring(0, path.length() - 5) + ".class";
-                if (new File(class_file).lastModified() < f.lastModified()) {
+                if (new File(class_file).lastModified() < f.lastModified() || compile_anyway) {
                     args_to_compile.add(path);
                 }
             }
@@ -24,6 +25,9 @@ public class CompileAll {
     public static void main(String[] args) {
         long start = System.nanoTime();
         int num_cores = Runtime.getRuntime().availableProcessors();
+        if (args.length == 1 && args[0].equals("all")) {
+            compile_anyway = true;
+        }
         args_to_compile.add("javac");
         int return_value = -1;
         try {
